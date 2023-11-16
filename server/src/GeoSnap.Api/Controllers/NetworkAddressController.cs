@@ -3,17 +3,12 @@ using GeoSnap.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using GeoSnap.Domain.Extensions;
 using GeoSnap.Application.Queries;
-using GeoSnap.Application.Interfaces;
 
 namespace GeoSnap.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 public class NetworkAddressController : ControllerBase
 {
-    //private readonly ILogger<WeatherForecastController> _logger;
-
-    //private readonly IGeoLocationDataProvider _geoLocationDataProvider;
-
     [HttpGet("{networkAddress}", Name = "GetRecentLocation")]
     public async Task<ActionResult<NetworkAddressDto>> GetRecentLocationAsync(ISender sender, [FromRoute] string networkAddress)
     {
@@ -24,12 +19,7 @@ public class NetworkAddressController : ControllerBase
 
         var result = await sender.Send(new GetNetworkAddressRecentGeoLocationQuery(networkAddress));
 
-        if(result is null)
-        {
-            return NotFound();
-        }
-
-        return Ok(result);
+        return result is null ? NotFound() : Ok(result);
     }
 
 }

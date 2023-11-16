@@ -2,5 +2,6 @@
 public enum ProtocolVersion
 {
     IPv4,
-    IPv6
+    IPv6,
+    Unknown
 }
