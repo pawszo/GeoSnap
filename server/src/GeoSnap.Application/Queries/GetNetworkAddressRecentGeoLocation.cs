@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Extensions;
 using Microsoft.Extensions.Logging;
@@ -8,12 +9,12 @@ namespace GeoSnap.Application.Queries;
 public record class GetNetworkAddressRecentGeoLocationQuery(string networkAddress) : IRequest<NetworkAddressDto?>;
 public class GetNetworkAddressRecentGeoLocationQueryHandler : IRequestHandler<GetNetworkAddressRecentGeoLocationQuery, NetworkAddressDto?>
 {
-    private readonly ILogger<GetNetworkAddressRecentGeoLocationQueryHandler> _logger;
+    private readonly ILogger<NetworkAddress> _logger;
     private readonly IGeoLocationService _geoLocationService;
     private readonly INetworkAddressStoringService _store;
 
     public GetNetworkAddressRecentGeoLocationQueryHandler(
-        ILogger<GetNetworkAddressRecentGeoLocationQueryHandler> logger, 
+        ILogger<NetworkAddress> logger, 
         IGeoLocationService geoLocationService, 
         INetworkAddressStoringService store)
     {
@@ -27,8 +28,13 @@ public class GetNetworkAddressRecentGeoLocationQueryHandler : IRequestHandler<Ge
         var recentGeoLocation = await _geoLocationService.GetGeoLocationAsync(request.networkAddress);
         if (recentGeoLocation is null)
         {
+            _logger.LogWarning("Provider failed to find recent geo location data for network address {networkAddress}", request.networkAddress);
+
             var historicData = await _store.GetHistoryAsync(request.networkAddress);
-            return historicData?.Latest() ?? null;
+            var lastKnown = historicData?.Latest();
+
+            if(lastKnown is not null) _logger.LogInformation("Returning last known geo location data for network address {networkAddress}", request.networkAddress);
+            return lastKnown;
         }
 
         return await _store.SaveAsync(new NetworkAddressDto
