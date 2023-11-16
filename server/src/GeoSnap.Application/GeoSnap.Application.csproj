@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GeoSnap.Domain\GeoSnap.Domain.csproj" />
-    <ProjectReference Include="..\GeoSnap.Infrastructure\GeoSnap.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

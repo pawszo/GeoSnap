@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using GeoSnap.Infrastructure;
 using GeoSnap.Application.Dtos;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
@@ -9,14 +8,17 @@ public record class GetNetworkAddressRecentGeoLocationQuery(string IP) : IReques
 public class GetNetworkAddressRecentGeoLocationQueryHandler : IRequestHandler<GetNetworkAddressRecentGeoLocationQuery, NetworkAddressDto?>
 {
     private readonly ILogger<GetNetworkAddressRecentGeoLocationQueryHandler> _logger;
-    private readonly IGeoLocationDataProvider _geoLocationDataProvider;
-    private readonly ApplicationDbContext _dbContext;
+    private readonly IGeoLocationService _geoLocationService;
+    private readonly IDbService _dbService;
 
-    public GetNetworkAddressRecentGeoLocationQueryHandler(ILogger<GetNetworkAddressRecentGeoLocationQueryHandler> logger, IGeoLocationDataProvider geoLocationDataProvider, ApplicationDbContext dbContext)
+    public GetNetworkAddressRecentGeoLocationQueryHandler(
+        ILogger<GetNetworkAddressRecentGeoLocationQueryHandler> logger, 
+        IGeoLocationService geoLocationService, 
+        IDbService dbService)
     {
         _logger = logger;
-        _geoLocationDataProvider = geoLocationDataProvider;
-        _dbContext = dbContext;
+        _geoLocationService = geoLocationService;
+        _dbService = dbService;
     }
 
     public Task<NetworkAddressDto?> Handle(GetNetworkAddressRecentGeoLocationQuery request, CancellationToken cancellationToken)
