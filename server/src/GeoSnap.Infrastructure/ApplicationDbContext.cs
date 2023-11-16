@@ -15,6 +15,9 @@ public class ApplicationDbContext : DbContext
             .HasForeignKey(g => g.IP);
 
         modelBuilder.Entity<NetworkAddress>()
-        .HasKey(n => n.IP);
+            .Property(n => n.Version)
+            .HasConversion<string>();
+        modelBuilder.Entity<NetworkAddress>()
+            .HasKey(n => n.IP);
     }
 }
