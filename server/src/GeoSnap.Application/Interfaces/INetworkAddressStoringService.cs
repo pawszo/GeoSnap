@@ -1,0 +1,26 @@
+﻿using GeoSnap.Application.Dtos;
+
+namespace GeoSnap.Application.Interfaces;
+public interface INetworkAddressStoringService
+{
+    /// <summary>
+    /// Creates or updates a record in the store.
+    /// </summary>
+    /// <param name="recent">Data from external provider</param>
+    /// <returns>Saved record updated with additional data if formerly existed such as known domains</returns>
+    Task<NetworkAddressDto> SaveAsync(NetworkAddressDto recent);
+
+    /// <summary>
+    /// Retrieves full geo location history for a network address
+    /// </summary>
+    /// <param name="networkAddress"></param>
+    /// <returns>null if no record exists</returns>
+    Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress);
+
+    /// <summary>
+    /// Deletes the full history of a network address
+    /// </summary>
+    /// <param name="networkAddress"></param>
+    /// <returns></returns>
+    Task DeleteAsync(string networkAddress);
+}

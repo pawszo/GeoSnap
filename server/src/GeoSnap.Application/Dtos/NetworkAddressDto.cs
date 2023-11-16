@@ -5,5 +5,6 @@ public class NetworkAddressDto
 {
     public required string IP { get; set; }
     public ProtocolVersion Version { get; set; }
+    public ICollection<string> KnownDomains { get; set; } = new List<string>();
     public NetworkAddressGeoLocationDto? RecentGeoLocation { get; set; }
 }

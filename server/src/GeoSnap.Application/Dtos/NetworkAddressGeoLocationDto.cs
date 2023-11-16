@@ -1,4 +1,6 @@
-﻿namespace GeoSnap.Application.Dtos;
+﻿using GeoSnap.Domain.Enums;
+
+namespace GeoSnap.Application.Dtos;
 public class NetworkAddressGeoLocationDto
 {
     public DateTime? CapturedAt { get; set; }
@@ -12,5 +14,6 @@ public class NetworkAddressGeoLocationDto
     public string? ZipCode { get; set; }
 
     // Foreign key to NetworkAddress
-    public string? IP { get; set; }
+    public required string IP { get; set; }
+    public ProtocolVersion ProtocolVersion { get; set; }
 }
