@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using GeoSnap.Domain.Enums;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using GeoSnap.Domain.Enums;
 
 namespace GeoSnap.Application.Dtos;
 public class IpStackGeoLocationDto

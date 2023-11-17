@@ -1,11 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Net.Http;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using GeoSnap.Application.Dtos;
-using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
