@@ -1,4 +1,6 @@
-﻿namespace GeoSnap.Domain.Entities;
+﻿using GeoSnap.Domain.Enums;
+
+namespace GeoSnap.Domain.Entities;
 public class NetworkAddressGeoLocation
 {
     public DateTime CapturedAt { get; set; }
@@ -13,5 +15,8 @@ public class NetworkAddressGeoLocation
 
     // Foreign key to NetworkAddress
     public required string IP { get; set; }
-    public required NetworkAddress NetworkAddress { get; set; }
+    public required ProtocolVersion ProtocolVersion { get; set; }
+    public virtual required NetworkAddress NetworkAddress { get; set; }
+
+
 }

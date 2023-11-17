@@ -15,8 +15,4 @@
     <ProjectReference Include="..\GeoSnap.Domain\GeoSnap.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
-
 </Project>
