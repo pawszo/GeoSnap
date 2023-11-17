@@ -4,8 +4,12 @@ using Microsoft.EntityFrameworkCore;
 namespace GeoSnap.Infrastructure;
 public class ApplicationDbContext : DbContext
 {
-    public DbSet<NetworkAddress> NetworkAddresses { get; set; }
-    public DbSet<NetworkAddressGeoLocation> GeoLocations { get; set; }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<NetworkAddress> NetworkAddresses => Set<NetworkAddress>();
+    public DbSet<NetworkAddressGeoLocation> GeoLocations => Set<NetworkAddressGeoLocation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
