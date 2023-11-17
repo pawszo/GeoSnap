@@ -9,18 +9,21 @@ using GeoSnap.Application.Interfaces;
 namespace GeoSnap.Infrastructure.Services;
 public class IpStackService : IGeoLocationDataProvider
 {
-    public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain)
+    public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         throw new NotImplementedException();
     }
 
-    public Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4)
+    public Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         throw new NotImplementedException();
     }
 
-    public Task<NetworkAddressGeoLocationDto?> FindIPV6Async(string ipV6)
+    public Task<NetworkAddressGeoLocationDto?> FindIPV6Async(string ipV6, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         throw new NotImplementedException();
     }
 }

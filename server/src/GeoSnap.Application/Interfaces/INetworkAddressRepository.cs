@@ -1,13 +1,12 @@
 ﻿using GeoSnap.Domain.Entities;
-using System.Collections.Generic;
 
 namespace GeoSnap.Application.Interfaces;
 public interface INetworkAddressRepository
 {
-    Task<IReadOnlyCollection<NetworkAddress>> GetAllAsync(Func<NetworkAddress, bool> filter);
-    Task<NetworkAddress?> FindByIPAsync(string ip);
-    Task<NetworkAddress?> FindByDomainUrlAsync(string domainUrl);
-    Task AddAsync(NetworkAddress record);
-    Task UpdateAsync(NetworkAddress record);
-    Task DeleteAsync(NetworkAddress record);
+    Task<IReadOnlyCollection<NetworkAddress>> GetAllAsync(Func<NetworkAddress, bool> filter, CancellationToken cancellationToken);
+    Task<NetworkAddress?> FindByIPAsync(string ip, CancellationToken cancellationToken);
+    Task<NetworkAddress?> FindByDomainUrlAsync(string domainUrl, CancellationToken cancellationToken);
+    Task AddAsync(NetworkAddress record, CancellationToken cancellationToken);
+    Task UpdateAsync(NetworkAddress record, CancellationToken cancellationToken);
+    Task DeleteAsync(NetworkAddress record, CancellationToken cancellationToken);
 }

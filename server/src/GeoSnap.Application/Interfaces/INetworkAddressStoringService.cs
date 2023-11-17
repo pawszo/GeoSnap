@@ -8,19 +8,19 @@ public interface INetworkAddressStoringService
     /// </summary>
     /// <param name="recent">Data from external provider</param>
     /// <returns>Saved record updated with additional data if formerly existed such as known domains</returns>
-    Task<NetworkAddressDto> SaveAsync(NetworkAddressDto recent);
+    Task<NetworkAddressDto> SaveAsync(NetworkAddressDto recent, CancellationToken cancellationToken);
 
     /// <summary>
     /// Retrieves full geo location history for a network address
     /// </summary>
     /// <param name="networkAddress"></param>
     /// <returns>null if no record exists</returns>
-    Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress);
+    Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress, CancellationToken cancellationToken);
 
     /// <summary>
     /// Deletes the full history of a network address
     /// </summary>
     /// <param name="networkAddress"></param>
     /// <returns></returns>
-    Task DeleteAsync(string networkAddress);
+    Task<bool> DeleteAsync(string networkAddress, CancellationToken cancellationToken);
 }

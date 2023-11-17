@@ -16,22 +16,23 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         _logger = logger;
     }
 
-    public async Task DeleteAsync(string networkAddress)
+    public async Task<bool> DeleteAsync(string networkAddress, CancellationToken cancellationToken)
     {
-        var record = await GetByNetworkAddress(networkAddress);
+        var record = await GetByNetworkAddress(networkAddress, cancellationToken);
         if (record is not null)
         {
-            await _networkAddressRepository.DeleteAsync(record);
+            await _networkAddressRepository.DeleteAsync(record, cancellationToken);
             _logger.LogInformation("Deleted record for {networkAddress}", networkAddress);
-            return;
+            return true;
         }
 
         _logger.LogWarning("No record found for {networkAddress}", networkAddress);
+        return false;
     }
 
-    public async Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress)
+    public async Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress, CancellationToken cancellationToken)
     {
-        var record = await GetByNetworkAddress(networkAddress);
+        var record = await GetByNetworkAddress(networkAddress, cancellationToken);
         if (record is not null)
         {
             return NetworkAddressHistoryDto.MapFrom(record);
@@ -41,31 +42,34 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         return null;
     }
 
-    public async Task<NetworkAddressDto> SaveAsync(NetworkAddressDto recent)
+    public async Task<NetworkAddressDto> SaveAsync(NetworkAddressDto recent, CancellationToken cancellationToken)
     {
-        var current = await _networkAddressRepository.FindByIPAsync(recent.IP);
+        cancellationToken.ThrowIfCancellationRequested();
+        var current = await _networkAddressRepository.FindByIPAsync(recent.IP, cancellationToken);
 
         if(current is null)
         {
             var record = recent.MapTo();
-            await _networkAddressRepository.AddAsync(record);
+            _networkAddressRepository.AddAsync(record, cancellationToken);
             _logger.LogInformation("Created record for {IP}", recent.IP);
             return recent;
         }
 
         current.KnownDomains = Enumerable.Concat( current.KnownDomains, recent.KnownDomains).Distinct().ToArray();
         current.GeoLocations.Add(recent.RecentGeoLocation.MapTo(current));
-        await _networkAddressRepository.UpdateAsync(current);
+        await _networkAddressRepository.UpdateAsync(current, cancellationToken);
 
         _logger.LogInformation("Updated record for {IP}", recent.IP);
         return NetworkAddressHistoryDto.MapFrom(current).Latest();
     }
 
-    private async Task<NetworkAddress?> GetByNetworkAddress(string networkAddress)
+    private async Task<NetworkAddress?> GetByNetworkAddress(string networkAddress, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+
         return networkAddress.TryGetValidDomainUrl(out string domainUrl)
-            ? await _networkAddressRepository.FindByDomainUrlAsync(domainUrl)
+            ? await _networkAddressRepository.FindByDomainUrlAsync(domainUrl, cancellationToken)
                 : networkAddress.TryGetValidIp(out string ip, out _)
-                    ? await _networkAddressRepository.FindByIPAsync(ip) : null;
+                    ? await _networkAddressRepository.FindByIPAsync(ip, cancellationToken) : null;
     }   
 }

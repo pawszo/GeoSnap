@@ -42,4 +42,30 @@ public static class StringExtensions
         domainUrl = string.Empty;
         return false;
     }
+
+    /// <summary>
+    /// Compares two domain urls which were formerly returned by TryGetValidDomainUrl.
+    /// Therefore assumes that url is trimmed, lowercase, with no protocol and no routes.
+    /// </summary>
+    /// <param name="domainUrl"></param>
+    /// <param name="otherDomainUrl"></param>
+    /// <returns></returns>
+    public static bool IsSameDomain(this string domainUrl, string otherDomainUrl)
+    {
+        if (string.IsNullOrWhiteSpace(domainUrl) || string.IsNullOrWhiteSpace(otherDomainUrl)) return false;
+
+        if (domainUrl.Equals(otherDomainUrl, StringComparison.InvariantCultureIgnoreCase)) return true;
+
+        if (domainUrl.StartsWith("www.", StringComparison.InvariantCultureIgnoreCase))
+        {
+            domainUrl = domainUrl[4..];
+        }
+
+        if (otherDomainUrl.StartsWith("www.", StringComparison.InvariantCultureIgnoreCase))
+        {
+            otherDomainUrl = otherDomainUrl[4..];
+        }
+
+        return domainUrl.Equals(otherDomainUrl, StringComparison.InvariantCultureIgnoreCase);
+    }
 }
