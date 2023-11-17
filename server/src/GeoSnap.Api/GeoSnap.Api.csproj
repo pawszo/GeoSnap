@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GeoSnap.Application\GeoSnap.Application.csproj" />
     <ProjectReference Include="..\GeoSnap.Domain\GeoSnap.Domain.csproj" />
+    <ProjectReference Include="..\GeoSnap.Infrastructure\GeoSnap.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
