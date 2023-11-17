@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GeoSnap.Application.Dtos;
 using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
 
@@ -11,11 +12,13 @@ namespace GeoSnap.Infrastructure.Services;
 public class IpifyService : IGeoLocationDataProvider
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<IpifyService> _logger;
     private readonly string _apiKey;
 
-    public IpifyService(IHttpClientFactory httpClientFactory, IConfiguration config)
+    public IpifyService(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<IpifyService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
         _apiKey = config.GetValue<string>("ApiKey:Ipify");
     }
 
