@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace GeoSnap.Infrastructure;
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(options =>
                    options.UseInMemoryDatabase("TEST_DATABASE"));
