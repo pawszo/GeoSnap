@@ -5,10 +5,20 @@ using System.Threading.Tasks;
 using GeoSnap.Application.Dtos;
 using System.Collections.Generic;
 using GeoSnap.Application.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace GeoSnap.Infrastructure.Services;
 public class IpifyService : IGeoLocationDataProvider
 {
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _apiKey;
+
+    public IpifyService(IHttpClientFactory httpClientFactory, IConfiguration config)
+    {
+        _httpClientFactory = httpClientFactory;
+        _apiKey = config.GetValue<string>("ApiKey:Ipify");
+    }
+
     public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

@@ -5,10 +5,20 @@ using System.Threading.Tasks;
 using GeoSnap.Application.Dtos;
 using System.Collections.Generic;
 using GeoSnap.Application.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace GeoSnap.Infrastructure.Services;
 public class IpStackService : IGeoLocationDataProvider
 {
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly string _apiKey;
+
+    public IpStackService(IHttpClientFactory httpClientFactory, IConfiguration config)
+    {
+        _httpClientFactory = httpClientFactory;
+        _apiKey = config.GetValue<string>("ApiKey:IpStack");
+    }
+
     public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

@@ -50,7 +50,7 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         if(current is null)
         {
             var record = recent.MapTo();
-            _networkAddressRepository.AddAsync(record, cancellationToken);
+            await _networkAddressRepository.AddAsync(record, cancellationToken);
             _logger.LogInformation("Created record for {IP}", recent.IP);
             return recent;
         }

@@ -20,6 +20,15 @@ public static class DependencyInjection
         services.AddScoped<IGeoLocationService, GeoLocationService>();
         services.AddScoped<INetworkAddressRepository, NetworkAddressRepository>();
 
+        services.AddHttpClient("ipStack", client =>
+        {
+            client.BaseAddress = new Uri(configuration["BaseUrl:IpStack"]);
+        });
+
+        services.AddHttpClient("ipify", client =>
+        {
+            client.BaseAddress = new Uri(configuration["BaseUrl:Ipify"]);
+        });
         return services;
     }
 }
