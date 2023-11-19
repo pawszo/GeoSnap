@@ -14,6 +14,8 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<NetworkAddressGeoLocation>()
+            .HasKey(g => new { g.IP, g.CapturedAt });
+        modelBuilder.Entity<NetworkAddressGeoLocation>()
             .HasOne(g => g.NetworkAddress)
             .WithMany(n => n.GeoLocations)
             .HasForeignKey(g => g.IP);

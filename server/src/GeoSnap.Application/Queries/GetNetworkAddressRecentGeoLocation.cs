@@ -27,10 +27,10 @@ public class GetNetworkAddressRecentGeoLocationQueryHandler(
         }
 
         return await store.SaveAsync(new NetworkAddressDto
-        { 
+        {
             IP = recentGeoLocation.IP,
             Version = recentGeoLocation.ProtocolVersion,
-            KnownDomains = request.NetworkAddress.TryGetValidDomainUrl(out var domain) ? new[] { domain } : [],
+            Domain = request.NetworkAddress.TryGetValidDomainUrl(out string domain) ? domain : null,
             RecentGeoLocation = recentGeoLocation
         }, cancellationToken);
     }

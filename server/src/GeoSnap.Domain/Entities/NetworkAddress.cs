@@ -5,6 +5,6 @@ public class NetworkAddress
 {
     public required string IP { get; set; }
     public required ProtocolVersion Version { get; set; }
-    public ICollection<string> KnownDomains { get; set; } = new List<string>();
-    public virtual ICollection<NetworkAddressGeoLocation> GeoLocations { get; set; } = new List<NetworkAddressGeoLocation>();
+    public string? Domain { get; set; }
+    public ICollection<NetworkAddressGeoLocation> GeoLocations { get; set; }
 }

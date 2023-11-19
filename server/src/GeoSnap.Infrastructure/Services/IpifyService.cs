@@ -14,12 +14,16 @@ public class IpifyService : IGeoLocationDataProvider
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<IpifyService> _logger;
     private readonly string _apiKey;
+    private readonly string _baseUrlV4;
+    private readonly string _baseUrlV6;
 
     public IpifyService(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<IpifyService> logger)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
         _apiKey = config.GetValue<string>("ApiKey:Ipify");
+        _baseUrlV4 = config.GetValue<string>("BaseUrl:IpifyV4");
+        _baseUrlV6 = config.GetValue<string>("BaseUrl:IpifyV6");
     }
 
     public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)

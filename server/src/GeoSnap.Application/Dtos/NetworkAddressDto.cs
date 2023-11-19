@@ -6,7 +6,7 @@ public class NetworkAddressDto
 {
     public required string IP { get; set; }
     public ProtocolVersion Version { get; set; }
-    public ICollection<string> KnownDomains { get; set; } = new List<string>();
+    public string? Domain { get; set; }
     public required NetworkAddressGeoLocationDto RecentGeoLocation { get; set; }
 
     public NetworkAddress MapTo()
@@ -15,9 +15,9 @@ public class NetworkAddressDto
         {
             IP = IP,
             Version = Version,
-            KnownDomains = KnownDomains
+            Domain = Domain 
         };
-        var geoLocation = new NetworkAddressGeoLocation()
+        NetworkAddressGeoLocation geoLocation = new NetworkAddressGeoLocation()
         {
             CapturedAt = RecentGeoLocation.CapturedAt,
             DataProviderName = RecentGeoLocation.DataProviderName,

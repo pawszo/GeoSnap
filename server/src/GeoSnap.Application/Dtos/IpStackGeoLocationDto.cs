@@ -1,6 +1,9 @@
-﻿using GeoSnap.Domain.Enums;
+﻿using Newtonsoft.Json;
+using GeoSnap.Domain.Enums;
+using Newtonsoft.Json.Serialization;
 
 namespace GeoSnap.Application.Dtos;
+[JsonObject(NamingStrategyType = typeof(SnakeCaseNamingStrategy), ItemNullValueHandling = NullValueHandling.Ignore)]
 public class IpStackGeoLocationDto
 {
     public string Ip { get; set; } = string.Empty;
@@ -17,7 +20,7 @@ public class IpStackGeoLocationDto
     {
         CapturedAt = DateTime.UtcNow,
         ProtocolVersion = Type == "ipv4" ? ProtocolVersion.IPv4 : ProtocolVersion.IPv6,
-        DataProviderName = "Ipify",
+        DataProviderName = "IpStack",
         IP = Ip,
         Latitude = Latitude,
         Longitude = Longitude,

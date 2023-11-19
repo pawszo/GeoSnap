@@ -11,15 +11,14 @@ public class NetworkAddressRepository(ILogger<NetworkAddress> logger, Applicatio
     public async Task AddAsync(NetworkAddress record, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        dbContext.NetworkAddresses.Add(record);
+        await dbContext.NetworkAddresses.AddAsync(record, cancellationToken);
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(NetworkAddress record, CancellationToken cancellationToken)
+    public void Delete(NetworkAddress record)
     {
-        cancellationToken.ThrowIfCancellationRequested();
         dbContext.Remove(record);
-        await dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 
     public async Task<NetworkAddress?> FindByDomainUrlAsync(string domainUrl, CancellationToken cancellationToken)
@@ -27,13 +26,20 @@ public class NetworkAddressRepository(ILogger<NetworkAddress> logger, Applicatio
         cancellationToken.ThrowIfCancellationRequested();
         return await dbContext
         .NetworkAddresses
-        .FirstOrDefaultAsync(n => n.KnownDomains.Any(d => d.IsSameDomain(domainUrl)));
+        .AsNoTracking()
+        .Include(n => n.GeoLocations)
+        .FirstOrDefaultAsync(n => n.Domain == domainUrl, cancellationToken);
     }
 
     public async Task<NetworkAddress?> FindByIPAsync(string ip, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await dbContext.NetworkAddresses.FirstOrDefaultAsync(n => n.IP.Equals(ip, StringComparison.InvariantCultureIgnoreCase));
+        var networkAddress = await dbContext.FindAsync<NetworkAddress>(ip, cancellationToken);
+        if(networkAddress is not null)
+        {
+            await dbContext.Entry(networkAddress).Collection(n => n.GeoLocations).LoadAsync(cancellationToken);
+        }
+        return networkAddress;
     }
 
     public async Task<IReadOnlyCollection<NetworkAddress>> GetAllAsync(Func<NetworkAddress,bool> filter, CancellationToken cancellationToken)
@@ -41,14 +47,14 @@ public class NetworkAddressRepository(ILogger<NetworkAddress> logger, Applicatio
         cancellationToken.ThrowIfCancellationRequested();
         return await dbContext.NetworkAddresses
             .Where(n => filter(n))
+            .Include(n => n.GeoLocations)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task UpdateAsync(NetworkAddress record, CancellationToken cancellationToken)
+    public void Update(NetworkAddress record)
     {
-        cancellationToken.ThrowIfCancellationRequested();
         dbContext.Update(record);
-        await dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 }

@@ -21,7 +21,7 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         var record = await GetByNetworkAddress(networkAddress, cancellationToken);
         if (record is not null)
         {
-            await _networkAddressRepository.DeleteAsync(record, cancellationToken);
+            _networkAddressRepository.Delete(record);
             _logger.LogInformation("Deleted record for {networkAddress}", networkAddress);
             return true;
         }
@@ -54,13 +54,14 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
             _logger.LogInformation("Created record for {IP}", recent.IP);
             return recent;
         }
+        current.Domain ??= recent.Domain;
+        recent.Domain ??= current.Domain;
 
-        current.KnownDomains = Enumerable.Concat( current.KnownDomains, recent.KnownDomains).Distinct().ToArray();
         current.GeoLocations.Add(recent.RecentGeoLocation.MapTo(current));
-        await _networkAddressRepository.UpdateAsync(current, cancellationToken);
+        _networkAddressRepository.Update(current);
 
         _logger.LogInformation("Updated record for {IP}", recent.IP);
-        return NetworkAddressHistoryDto.MapFrom(current).Latest();
+        return recent;
     }
 
     private async Task<NetworkAddress?> GetByNetworkAddress(string networkAddress, CancellationToken cancellationToken)

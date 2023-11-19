@@ -7,6 +7,6 @@ public interface INetworkAddressRepository
     Task<NetworkAddress?> FindByIPAsync(string ip, CancellationToken cancellationToken);
     Task<NetworkAddress?> FindByDomainUrlAsync(string domainUrl, CancellationToken cancellationToken);
     Task AddAsync(NetworkAddress record, CancellationToken cancellationToken);
-    Task UpdateAsync(NetworkAddress record, CancellationToken cancellationToken);
-    Task DeleteAsync(NetworkAddress record, CancellationToken cancellationToken);
+    void Update(NetworkAddress record);
+    void Delete(NetworkAddress record);
 }

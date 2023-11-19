@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using Newtonsoft.Json;
+using System.Text.Json;
+using System.Net.Http.Json;
 using GeoSnap.Application.Dtos;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
@@ -21,22 +23,22 @@ public class IpStackService : IGeoLocationDataProvider
     public async Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await FindAsync(domain);
+        return await FindAsync(domain, cancellationToken);
     }
 
     public async Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await FindAsync(ipV4);
+        return await FindAsync(ipV4, cancellationToken);
     }
 
     public async Task<NetworkAddressGeoLocationDto?> FindIPV6Async(string ipV6, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        return await FindAsync(ipV6);
+        return await FindAsync(ipV6, cancellationToken);
     }
 
-    private async Task<NetworkAddressGeoLocationDto?> FindAsync(string networkAddress)
+    private async Task<NetworkAddressGeoLocationDto?> FindAsync(string networkAddress, CancellationToken cancellationToken)
     {
         var client = _httpClientFactory.CreateClient("IpStack");
         var responseMessage = await client.GetAsync($"{networkAddress}?access_key={_apiKey}&output=json");
@@ -44,8 +46,8 @@ public class IpStackService : IGeoLocationDataProvider
         if(responseMessage.IsSuccessStatusCode)
         {
             _logger.LogInformation("Successfully retrieved data for {networkAddress}", networkAddress);
-            using var contentStream = await responseMessage.Content.ReadAsStreamAsync();
-            var dto = await JsonSerializer.DeserializeAsync<IpStackGeoLocationDto>(contentStream);
+            var dtoString = await responseMessage.Content.ReadAsStringAsync();
+            var dto = JsonConvert.DeserializeObject<IpStackGeoLocationDto>(dtoString);
 
             if(dto is null)
             {
