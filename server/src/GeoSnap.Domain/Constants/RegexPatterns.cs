@@ -14,5 +14,5 @@ public static class RegexPatterns
     /// <summary>
     /// Group 1 contains the IP address
     /// </summary>
-    public const string IpV6 = @"^\s*((?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})\s*$";
+    public const string IpV6 = @"^\s*((?:[0-9a-fA-F]{0,4}:){3,7}[0-9a-fA-F]{1,4})\s*$";
 }
