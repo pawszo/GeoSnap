@@ -1,5 +1,4 @@
 ﻿using GeoSnap.Application.Dtos;
-using GeoSnap.Domain.Extensions;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,18 +10,8 @@ public class GeoLocationService(
 {
     public async Task<NetworkAddressGeoLocationDto?> GetGeoLocationAsync(string ipAddress, CancellationToken cancellationToken)
     {
-        NetworkAddressGeoLocationDto? geoLocationData = null;
+        NetworkAddressGeoLocationDto? geoLocationData = await mainProvider.FindIPAsync(ipAddress, cancellationToken);
 
-        if (ipAddress.TryGetValidIp(out var ip, out var protocol))
-        {
-            geoLocationData = protocol == Domain.Enums.ProtocolVersion.IPv4 
-                ? await mainProvider.FindIPV4Async(ip, cancellationToken)
-                : await mainProvider.FindIPV6Async(ip, cancellationToken);
-
-            geoLocationData ??= protocol == Domain.Enums.ProtocolVersion.IPv4 
-                ? await alternativeProvider.FindIPV4Async(ip, cancellationToken)
-                : await alternativeProvider.FindIPV6Async(ip, cancellationToken);
-        }
-        return geoLocationData;
+        return geoLocationData ?? await alternativeProvider.FindIPAsync(ipAddress, cancellationToken);
     }
 }

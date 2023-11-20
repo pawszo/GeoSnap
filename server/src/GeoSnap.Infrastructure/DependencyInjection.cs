@@ -26,7 +26,11 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(configuration["BaseUrl:IpStack"]);
         });
 
-        services.AddHttpClient("Ipify");
+        services.AddHttpClient("Ipify", client =>
+        {
+            client.BaseAddress = new Uri(configuration["BaseUrl:Ipify"]);
+
+        });
         return services;
     }
 }

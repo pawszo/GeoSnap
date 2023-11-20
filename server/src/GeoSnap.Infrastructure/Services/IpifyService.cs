@@ -1,4 +1,5 @@
-﻿using GeoSnap.Application.Dtos;
+﻿using Newtonsoft.Json;
+using GeoSnap.Application.Dtos;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -9,27 +10,38 @@ public class IpifyService : IGeoLocationDataProvider
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<IpifyService> _logger;
     private readonly string _apiKey;
-    private readonly string _baseUrlV4;
-    private readonly string _baseUrlV6;
 
     public IpifyService(IHttpClientFactory httpClientFactory, IConfiguration config, ILogger<IpifyService> logger)
     {
         _httpClientFactory = httpClientFactory;
         _logger = logger;
         _apiKey = config.GetValue<string>("ApiKey:Ipify");
-        _baseUrlV4 = config.GetValue<string>("BaseUrl:IpifyV4");
-        _baseUrlV6 = config.GetValue<string>("BaseUrl:IpifyV6");
     }
 
-    public Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4, CancellationToken cancellationToken)
+    public async Task<NetworkAddressGeoLocationDto?> FindIPAsync(string ip, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        throw new NotImplementedException();
-    }
 
-    public Task<NetworkAddressGeoLocationDto?> FindIPV6Async(string ipV6, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        throw new NotImplementedException();
+        var client = _httpClientFactory.CreateClient("Ipify");
+        var responseMessage = await client.GetAsync($"api/v1?apiKey={_apiKey}&ipAddress={ip}", cancellationToken);
+
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            _logger.LogInformation("Successfully retrieved data for {ip}", ip);
+            var dtoString = await responseMessage.Content.ReadAsStringAsync();
+            var dto = JsonConvert.DeserializeObject<IpifyNetworkAddressDto>(dtoString);
+
+            if (dto is null)
+            {
+                _logger.LogError("Failed to deserialize data for {ip}", ip);
+                return null;
+            }
+
+            _logger.LogInformation("Successfully deserialized data for {ip}", ip);
+            return dto.MapTo();
+        }
+
+        _logger.LogError("Failed to retrieve data for {ip}", ip);
+        return null;
     }
 }
