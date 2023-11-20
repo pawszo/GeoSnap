@@ -6,8 +6,12 @@ using GeoSnap.Application.Queries;
 using GeoSnap.Application.Commands;
 
 namespace GeoSnap.Api.Controllers;
+
+/// <summary>
+/// Geo location data operations
+/// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("api/v1/[controller]")]
 public class NetworkAddressController : ControllerBase
 {
     /// <summary>
@@ -16,7 +20,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="networkAddress">IP or URL</param>
     /// <returns>Most recent geo location that was available</returns>
     [HttpGet("geolocation/{networkAddress}")]
-    public async Task<ActionResult<NetworkAddressDto>> GetRecentLocationAsync(ISender sender, [FromRoute] string networkAddress)
+    public async Task<ActionResult<NetworkAddressDto[]>> GetRecentLocationAsync(ISender sender, [FromRoute] string networkAddress)
     {
         if(networkAddress is null || !networkAddress.IsValidNetworkAddress())
         {
@@ -34,7 +38,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="networkAddress">IP or URL</param>
     /// <returns>geo locations history for a network address</returns>
     [HttpGet("history/{networkAddress}")]
-    public async Task<ActionResult<NetworkAddressHistoryDto>> GetHistoryAsync(ISender sender, [FromRoute] string networkAddress)
+    public async Task<ActionResult<NetworkAddressHistoryDto[]>> GetHistoryAsync(ISender sender, [FromRoute] string networkAddress)
     {
         if (networkAddress is null || !networkAddress.IsValidNetworkAddress())
         {
@@ -69,7 +73,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="addNetworkAddressData">IP or URL and with related geo location data</param>
     /// <returns>Created record</returns>
     [HttpPost("geolocation")]
-    public async Task<ActionResult<NetworkAddressDto>> PostAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
+    public async Task<ActionResult<NetworkAddressDto[]>> PostAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
     {
         if (addNetworkAddressData is null || !addNetworkAddressData.NetworkAddress.IsValidNetworkAddress())
         {
