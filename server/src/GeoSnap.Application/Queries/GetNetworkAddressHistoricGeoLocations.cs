@@ -34,7 +34,9 @@ public class GetNetworkAddressHistoricGeoLocationsQueryHandler(
             }
             return results.Count > 0 ? results : null;
         }
-        var result = await store.GetHistoryAsync(request.NetworkAddress, cancellationToken);
+
+        request.NetworkAddress.TryGetValidIp(out string ipAddress, out _);
+        var result = await store.GetHistoryAsync(ipAddress, cancellationToken);
 
         if(result is null)
         {

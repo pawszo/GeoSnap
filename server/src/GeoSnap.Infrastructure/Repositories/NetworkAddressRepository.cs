@@ -1,5 +1,4 @@
 ﻿using GeoSnap.Domain.Entities;
-using GeoSnap.Domain.Extensions;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using GeoSnap.Application.Interfaces;
@@ -15,20 +14,10 @@ public class NetworkAddressRepository(ILogger<NetworkAddress> logger, Applicatio
         await dbContext.SaveChangesAsync();
     }
 
-    public void Delete(NetworkAddress record)
+    public bool Delete(NetworkAddress record)
     {
         dbContext.Remove(record);
-        dbContext.SaveChanges();
-    }
-
-    public async Task<NetworkAddress?> FindByDomainUrlAsync(string domainUrl, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        return await dbContext
-        .NetworkAddresses
-        .AsNoTracking()
-        .Include(n => n.GeoLocations)
-        .FirstOrDefaultAsync(n => n.Domain == domainUrl, cancellationToken);
+        return dbContext.SaveChanges() > 0;
     }
 
     public async Task<NetworkAddress?> FindByIPAsync(string ip, CancellationToken cancellationToken)

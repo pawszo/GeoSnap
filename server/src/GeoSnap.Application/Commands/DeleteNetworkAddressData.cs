@@ -31,7 +31,9 @@ public class DeleteNetworkAddressDataCommandHandler(
             }
             return hasDeletedAny;
         }
+
+        request.NetworkAddress.TryGetValidIp(out string ipAddress, out _);
        
-        return await store.DeleteAsync(request.NetworkAddress, cancellationToken);
+        return await store.DeleteAsync(ipAddress, cancellationToken);
     }
 }

@@ -13,14 +13,14 @@ public interface INetworkAddressStoringService
     /// <summary>
     /// Retrieves full geo location history for a network address
     /// </summary>
-    /// <param name="networkAddress"></param>
+    /// <param name="ip"></param>
     /// <returns>null if no record exists</returns>
-    Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress, CancellationToken cancellationToken);
+    Task<NetworkAddressHistoryDto?> GetHistoryAsync(string ip, CancellationToken cancellationToken);
 
     /// <summary>
     /// Deletes the full history of a network address
     /// </summary>
-    /// <param name="networkAddress"></param>
+    /// <param name="ip"></param>
     /// <returns></returns>
-    Task<bool> DeleteAsync(string networkAddress, CancellationToken cancellationToken);
+    Task<bool> DeleteAsync(string ip, CancellationToken cancellationToken);
 }

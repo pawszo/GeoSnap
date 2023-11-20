@@ -16,29 +16,29 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         _logger = logger;
     }
 
-    public async Task<bool> DeleteAsync(string networkAddress, CancellationToken cancellationToken)
+    public async Task<bool> DeleteAsync(string ip, CancellationToken cancellationToken)
     {
-        var record = await GetByNetworkAddress(networkAddress, cancellationToken);
+        var record = await _networkAddressRepository.FindByIPAsync(ip, cancellationToken);
         if (record is not null)
         {
-            _networkAddressRepository.Delete(record);
-            _logger.LogInformation("Deleted record for {networkAddress}", networkAddress);
-            return true;
+            var isDeleted = _networkAddressRepository.Delete(record);
+            if(isDeleted) _logger.LogInformation("Deleted record for {ip}", ip);
+            return isDeleted;
         }
 
-        _logger.LogWarning("No record found for {networkAddress}", networkAddress);
+        _logger.LogWarning("No record found for {ip}", ip);
         return false;
     }
 
-    public async Task<NetworkAddressHistoryDto?> GetHistoryAsync(string networkAddress, CancellationToken cancellationToken)
+    public async Task<NetworkAddressHistoryDto?> GetHistoryAsync(string ip, CancellationToken cancellationToken)
     {
-        var record = await GetByNetworkAddress(networkAddress, cancellationToken);
+        var record = await _networkAddressRepository.FindByIPAsync(ip, cancellationToken);
         if (record is not null)
         {
             return NetworkAddressHistoryDto.MapFrom(record);
         }
 
-        _logger.LogWarning("No record found for {networkAddress}", networkAddress);
+        _logger.LogWarning("No record found for {ip}", ip);
         return null;
     }
 
@@ -63,14 +63,4 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         _logger.LogInformation("Updated record for {IP}", recent.IP);
         return recent;
     }
-
-    private async Task<NetworkAddress?> GetByNetworkAddress(string networkAddress, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        return networkAddress.TryGetValidDomainUrl(out string domainUrl)
-            ? await _networkAddressRepository.FindByDomainUrlAsync(domainUrl, cancellationToken)
-                : networkAddress.TryGetValidIp(out string ip, out _)
-                    ? await _networkAddressRepository.FindByIPAsync(ip, cancellationToken) : null;
-    }   
 }
