@@ -8,14 +8,14 @@ namespace GeoSnap.Infrastructure.Tests.Services.NetworkAddressStoringService;
 public abstract class NetworkAddressStoringServiceTestsBase
 {
     protected INetworkAddressStoringService Service;
-    protected Mock<INetworkAddressRepository> NetworkAddressRepositoryMock;
+    protected Mock<INetworkAddressRepository> RepositoryMock;
     protected Mock<ILogger<NetworkAddress>> LoggerMock;
 
     [SetUp]
     public void SetUp()
     {
-        NetworkAddressRepositoryMock = new Mock<INetworkAddressRepository>();
+        RepositoryMock = new Mock<INetworkAddressRepository>();
         LoggerMock = new Mock<ILogger<NetworkAddress>>();
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(NetworkAddressRepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
     }
 }
