@@ -9,11 +9,11 @@ public class GeoLocationService(
     [FromKeyedServices("alternative")] IGeoLocationDataProvider alternativeProvider
     ) : IGeoLocationService
 {
-    public async Task<NetworkAddressGeoLocationDto?> GetGeoLocationAsync(string networkAddress, CancellationToken cancellationToken)
+    public async Task<NetworkAddressGeoLocationDto?> GetGeoLocationAsync(string ipAddress, CancellationToken cancellationToken)
     {
         NetworkAddressGeoLocationDto? geoLocationData = null;
 
-        if (networkAddress.TryGetValidIp(out var ip, out var protocol))
+        if (ipAddress.TryGetValidIp(out var ip, out var protocol))
         {
             geoLocationData = protocol == Domain.Enums.ProtocolVersion.IPv4 
                 ? await mainProvider.FindIPV4Async(ip, cancellationToken)
@@ -23,12 +23,6 @@ public class GeoLocationService(
                 ? await alternativeProvider.FindIPV4Async(ip, cancellationToken)
                 : await alternativeProvider.FindIPV6Async(ip, cancellationToken);
         }
-        else if(networkAddress.TryGetValidDomainUrl(out var domain))
-        {
-            geoLocationData = await mainProvider.FindDomainAsync(domain, cancellationToken);
-            geoLocationData ??= await alternativeProvider.FindDomainAsync(domain, cancellationToken);
-        }
-
         return geoLocationData;
     }
 }

@@ -20,12 +20,6 @@ public class IpStackService : IGeoLocationDataProvider
         _apiKey = config.GetValue<string>("ApiKey:IpStack");
     }
 
-    public async Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        return await FindAsync(domain, cancellationToken);
-    }
-
     public async Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

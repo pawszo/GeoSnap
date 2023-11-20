@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GeoSnap.Application.Dtos;
-using System.Collections.Generic;
+﻿using GeoSnap.Application.Dtos;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -24,12 +19,6 @@ public class IpifyService : IGeoLocationDataProvider
         _apiKey = config.GetValue<string>("ApiKey:Ipify");
         _baseUrlV4 = config.GetValue<string>("BaseUrl:IpifyV4");
         _baseUrlV6 = config.GetValue<string>("BaseUrl:IpifyV6");
-    }
-
-    public Task<NetworkAddressGeoLocationDto?> FindDomainAsync(string domain, CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-        throw new NotImplementedException();
     }
 
     public Task<NetworkAddressGeoLocationDto?> FindIPV4Async(string ipV4, CancellationToken cancellationToken)
