@@ -6,8 +6,8 @@ namespace GeoSnap.Application.Dtos;
 [JsonObject(NamingStrategyType = typeof(CamelCaseNamingStrategy), ItemNullValueHandling = NullValueHandling.Ignore)]
 public class IpifyNetworkAddressDto
 {
-    public string Ip { get; set; } = string.Empty;
-    public IpifyLocationDto Location { get; set; }
+    public required string Ip { get; set; }
+    public required IpifyLocationDto Location { get; set; }
 
     public NetworkAddressGeoLocationDto MapTo()
     {
