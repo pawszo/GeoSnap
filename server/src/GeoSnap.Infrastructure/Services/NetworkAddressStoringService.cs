@@ -50,17 +50,29 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         if(current is null)
         {
             var record = recent.MapTo();
-            await _networkAddressRepository.AddAsync(record, cancellationToken);
-            _logger.LogInformation("Created record for {IP}", recent.IP);
+            var createdRecord = await _networkAddressRepository.AddAsync(record, cancellationToken);
+            if (createdRecord is not null)
+            {
+                _logger.LogInformation("Created record for {IP}", recent.IP);
+                return NetworkAddressHistoryDto.MapFrom(createdRecord).Latest();
+            }
+            _logger.LogWarning("Failed to create geo location for {IP}", recent.IP);
             return recent;
         }
         current.Domain ??= recent.Domain;
         recent.Domain ??= current.Domain;
 
         current.GeoLocations.Add(recent.RecentGeoLocation.MapTo(current));
-        _networkAddressRepository.Update(current);
+        var updatedRecord =_networkAddressRepository.Update(current);
 
-        _logger.LogInformation("Updated record for {IP}", recent.IP);
+        if (updatedRecord is not null)
+        {
+            _logger.LogInformation("Updated record for {IP}", updatedRecord.IP);
+            return NetworkAddressHistoryDto.MapFrom(updatedRecord).Latest();
+        }
+
+        _logger.LogWarning("Failed to update geo location for existing record with {IP}", recent.IP);
         return recent;
+
     }
 }

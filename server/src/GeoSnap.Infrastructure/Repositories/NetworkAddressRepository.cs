@@ -7,11 +7,14 @@ namespace GeoSnap.Infrastructure.Repositories;
 public class NetworkAddressRepository(ILogger<NetworkAddress> logger, ApplicationDbContext dbContext) : INetworkAddressRepository
 {
     //TODO handling of emergency DB and logging
-    public async Task AddAsync(NetworkAddress record, CancellationToken cancellationToken)
+    public async Task<NetworkAddress> AddAsync(NetworkAddress record, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        await dbContext.NetworkAddresses.AddAsync(record, cancellationToken);
-        await dbContext.SaveChangesAsync();
+        var createdRecord = await dbContext.NetworkAddresses.AddAsync(record, cancellationToken);
+        var changes = await dbContext.SaveChangesAsync();
+        if(changes > 0) logger.LogInformation("Created geo location for {IP}", createdRecord.Entity.IP);
+
+        return createdRecord.Entity;
     }
 
     public bool Delete(NetworkAddress record)
@@ -41,9 +44,12 @@ public class NetworkAddressRepository(ILogger<NetworkAddress> logger, Applicatio
             .ToListAsync();
     }
 
-    public void Update(NetworkAddress record)
+    public NetworkAddress Update(NetworkAddress record)
     {
-        dbContext.Update(record);
-        dbContext.SaveChanges();
+        var updatedRecord = dbContext.Update(record);
+        var changes = dbContext.SaveChanges();
+        if(changes > 0) logger.LogInformation("Updated geo location for {IP}", updatedRecord.Entity.IP);
+
+        return updatedRecord.Entity;
     }
 }
