@@ -3,13 +3,22 @@ using GeoSnap.Domain.Constants;
 using System.Text.RegularExpressions;
 
 namespace GeoSnap.Domain.Extensions;
-public static class StringExtensions
+public static partial class StringExtensions
 {
+    [GeneratedRegex(RegexPatterns.IpV4, RegexOptions.IgnoreCase)]
+    private static partial Regex IpV4Regex();
+
+    [GeneratedRegex(RegexPatterns.IpV6, RegexOptions.IgnoreCase)]
+    private static partial Regex IpV6Regex();
+
+    [GeneratedRegex(RegexPatterns.DomainUrl, RegexOptions.IgnoreCase)]
+    private static partial Regex DomainNameRegex();
+
     public static bool IsValidNetworkAddress(this string address) => address.TryGetValidDomainUrl(out _) || address.TryGetValidIp(out _, out _);
 
     public static bool TryGetValidIp(this string url, out string ip, out ProtocolVersion version)
     {
-        var matchV4 = Regex.Match(url, RegexPatterns.IpV4, RegexOptions.IgnoreCase);
+        var matchV4 = IpV4Regex().Match(url);
         if (matchV4.Success)
         {
             ip = matchV4.Groups[1].Value.ToLower();
@@ -17,7 +26,7 @@ public static class StringExtensions
             return true;
         }
 
-        var matchV6 = Regex.Match(url, RegexPatterns.IpV6, RegexOptions.IgnoreCase);
+        var matchV6 = IpV6Regex().Match(url);
         if (matchV6.Success)
         {
             ip = matchV6.Groups[1].Value.ToLower();
@@ -32,7 +41,7 @@ public static class StringExtensions
 
     public static bool TryGetValidDomainUrl(this string url, out string domainUrl)
     {
-        var match = Regex.Match(url, RegexPatterns.DomainUrl, RegexOptions.IgnoreCase);
+        var match = DomainNameRegex().Match(url);
         if (match.Success)
         {
             domainUrl = match.Groups[2].Value.ToLower();
