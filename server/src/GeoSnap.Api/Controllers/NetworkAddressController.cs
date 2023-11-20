@@ -63,4 +63,26 @@ public class NetworkAddressController : ControllerBase
         return isRemoved ? Ok() : NotFound();
     }
 
+    /// <summary>
+    /// Add geo location data for a network address from external source manually.
+    /// </summary>
+    /// <param name="addNetworkAddressData">IP or URL and with related geo location data</param>
+    /// <returns>Created record</returns>
+    [HttpPost("geolocation")]
+    public async Task<ActionResult<NetworkAddressDto>> PostAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
+    {
+        if (addNetworkAddressData is null || !addNetworkAddressData.NetworkAddress.IsValidNetworkAddress())
+        {
+            return BadRequest("Provided network address is not a valid IP or URL");
+        }
+
+        if(!addNetworkAddressData.Latitude.IsValidLatitude() || !addNetworkAddressData.Longitude.IsValidLongitude())
+        {
+            return BadRequest("Provided latitude or longitude is not valid. Acceptable range is -90 to 90 for latitude and -180 to 180 for longitude.");
+        }
+
+        var result = await sender.Send(addNetworkAddressData);
+
+        return Ok(result);
+    }
 }

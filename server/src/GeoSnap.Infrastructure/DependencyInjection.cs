@@ -19,6 +19,7 @@ public static class DependencyInjection
         services.AddKeyedScoped<IGeoLocationDataProvider, IpifyService>("alternative");
         services.AddScoped<IGeoLocationService, GeoLocationService>();
         services.AddScoped<INetworkAddressRepository, NetworkAddressRepository>();
+        services.AddTransient<IDnsResolvingService, DnsResolvingService>();
 
         services.AddHttpClient("IpStack", client =>
         {
