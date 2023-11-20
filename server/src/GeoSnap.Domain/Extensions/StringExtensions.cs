@@ -18,9 +18,9 @@ public static class StringExtensions
         }
 
         var matchV6 = Regex.Match(url, RegexPatterns.IpV6, RegexOptions.IgnoreCase);
-        if (matchV4.Success)
+        if (matchV6.Success)
         {
-            ip = matchV4.Groups[1].Value.ToLower();
+            ip = matchV6.Groups[1].Value.ToLower();
             version = ProtocolVersion.IPv6;
             return true;
         }

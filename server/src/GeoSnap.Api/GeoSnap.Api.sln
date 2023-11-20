@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Api", "GeoSnap.Api.csproj", "{9CC6B3F9-8776-4FC1-8754-3C63020974FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Api", "GeoSnap.Api.csproj", "{9CC6B3F9-8776-4FC1-8754-3C63020974FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Domain", "..\GeoSnap.Domain\GeoSnap.Domain.csproj", "{46A9FABD-A0F2-49A7-8C1A-33B7D5560FE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Domain", "..\GeoSnap.Domain\GeoSnap.Domain.csproj", "{46A9FABD-A0F2-49A7-8C1A-33B7D5560FE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Application", "..\GeoSnap.Application\GeoSnap.Application.csproj", "{7CACC805-0045-41B0-80EE-D2C88F6377CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Application", "..\GeoSnap.Application\GeoSnap.Application.csproj", "{7CACC805-0045-41B0-80EE-D2C88F6377CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Infrastructure", "..\GeoSnap.Infrastructure\GeoSnap.Infrastructure.csproj", "{D55E1C66-D57B-4D13-A564-6DAAD442EA57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Infrastructure", "..\GeoSnap.Infrastructure\GeoSnap.Infrastructure.csproj", "{D55E1C66-D57B-4D13-A564-6DAAD442EA57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Infrastructure.Tests", "..\..\tests\GeoSnap.Infrastructure.Tests\GeoSnap.Infrastructure.Tests.csproj", "{4AF6D079-C710-47D7-863C-BE301A7E6579}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Infrastructure.Tests", "..\..\tests\GeoSnap.Infrastructure.Tests\GeoSnap.Infrastructure.Tests.csproj", "{4AF6D079-C710-47D7-863C-BE301A7E6579}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Api.Tests", "..\..\tests\GeoSnap.Api.Tests\GeoSnap.Api.Tests.csproj", "{5BF14B26-E2AA-4B97-9277-62381D460A73}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

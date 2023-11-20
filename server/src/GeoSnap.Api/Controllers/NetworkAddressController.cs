@@ -29,7 +29,7 @@ public class NetworkAddressController : ControllerBase
 
         var result = await sender.Send(new GetNetworkAddressRecentGeoLocationQuery(networkAddress));
 
-        return result is null ? NotFound() : Ok(result);
+        return result is null || result.Count == 0 ? NotFound() : Ok(result);
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ public class NetworkAddressController : ControllerBase
 
         var result = await sender.Send(new GetNetworkAddressHistoricGeoLocationsQuery(networkAddress));
 
-        return result is null ? NotFound() : Ok(result);
+        return result is null || result.Count == 0 ? NotFound() : Ok(result);
     }
 
     /// <summary>
@@ -73,7 +73,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="addNetworkAddressData">IP or URL and with related geo location data</param>
     /// <returns>Created record</returns>
     [HttpPost("geolocation")]
-    public async Task<ActionResult<NetworkAddressDto[]>> PostAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
+    public async Task<ActionResult<NetworkAddressDto[]>> AddGeoLocationManuallyAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
     {
         if (addNetworkAddressData is null || !addNetworkAddressData.NetworkAddress.IsValidNetworkAddress())
         {
