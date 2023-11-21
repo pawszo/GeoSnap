@@ -69,6 +69,7 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
             {
                 _logger.LogInformation("Created record for {IP}", recent.IP);
                 var history = NetworkAddressHistoryDto.MapFrom(createdRecord);
+                await _cache.RemoveAsync(createdRecord.IP, cancellationToken);
                 await _cache.SetStringAsync(createdRecord.IP, JsonConvert.SerializeObject(history), cancellationToken);
                 return history.Latest();
             }
@@ -85,6 +86,7 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         {
             _logger.LogInformation("Updated record for {IP}", updatedRecord.IP);
             var history = NetworkAddressHistoryDto.MapFrom(updatedRecord);
+            await _cache.RemoveAsync(updatedRecord.IP, cancellationToken);
             await _cache.SetStringAsync(updatedRecord.IP, JsonConvert.SerializeObject(history), cancellationToken);
             return history.Latest();
         }
