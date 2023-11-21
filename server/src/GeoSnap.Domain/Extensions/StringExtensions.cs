@@ -45,6 +45,7 @@ public static partial class StringExtensions
         if (match.Success)
         {
             domainUrl = match.Groups[2].Value.ToLower();
+            if(domainUrl.StartsWith("www.")) domainUrl = domainUrl[4..];
             return true;
         }
 

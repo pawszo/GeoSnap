@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Infrastructure", ".
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GeoSnap.Infrastructure.Tests", "..\..\tests\GeoSnap.Infrastructure.Tests\GeoSnap.Infrastructure.Tests.csproj", "{4AF6D079-C710-47D7-863C-BE301A7E6579}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Api.Tests", "..\..\tests\GeoSnap.Api.Tests\GeoSnap.Api.Tests.csproj", "{5BF14B26-E2AA-4B97-9277-62381D460A73}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoSnap.Domain.Tests", "..\..\tests\GeoSnap.Domain.Tests\GeoSnap.Domain.Tests.csproj", "{228253D3-AA7B-4535-B801-C5925CC8A0CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AF6D079-C710-47D7-863C-BE301A7E6579}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BF14B26-E2AA-4B97-9277-62381D460A73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228253D3-AA7B-4535-B801-C5925CC8A0CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228253D3-AA7B-4535-B801-C5925CC8A0CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228253D3-AA7B-4535-B801-C5925CC8A0CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228253D3-AA7B-4535-B801-C5925CC8A0CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
