@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GeoSnap.Application.Interfaces;
+using GeoSnap.Infrastructure.Context;
 using GeoSnap.Infrastructure.Services;
 using Microsoft.Extensions.Configuration;
 using GeoSnap.Infrastructure.Repositories;
@@ -15,7 +16,11 @@ public static class DependencyInjection
             options.Configuration = configuration["CacheConnection"];
             options.InstanceName = configuration["geosnap"];
         });
-        //services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        var dbConnString = configuration.GetConnectionString("postgres");
+        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddDbContext<ApplicationDbContext>((sp, builder) =>
+                   builder.UseNpgsql(dbConnString));
         services.AddScoped<INetworkAddressStoringService, NetworkAddressStoringService>();
         services.AddKeyedScoped<IGeoLocationDataProvider, IpStackService>("main");
         services.AddKeyedScoped<IGeoLocationDataProvider, IpifyService>("alternative");
@@ -34,8 +39,6 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(configuration["BaseUrl:Ipify"]);
 
         });
-        services.AddDbContextFactory<ApplicationDbContext>(options =>
-                   options.UseNpgsql(configuration.GetConnectionString("postgres")));
         return services;
     }
 }

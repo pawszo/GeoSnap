@@ -17,6 +17,8 @@ builder.Services
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         options.JsonSerializerOptions.UnmappedMemberHandling = JsonUnmappedMemberHandling.Skip;
     });
+builder.Services.AddInfrastructureServices(config);
+builder.Services.AddApplicationServices();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services
     .AddEndpointsApiExplorer()
@@ -26,9 +28,8 @@ builder.Services
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         setup.IncludeXmlComments(xmlPath);
-    })
-    .AddApplicationServices()
-    .AddInfrastructureServices(config);
+    });
+    
 
 var app = builder.Build();
 
