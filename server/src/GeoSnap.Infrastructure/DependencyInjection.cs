@@ -16,8 +16,7 @@ public static class DependencyInjection
             options.InstanceName = configuration["geosnap"];
         });
         services.AddDbContext<ApplicationDbContext>(options =>
-                   options.UseInMemoryDatabase("TEST_DATABASE"));
-        //TODO - Add real database
+                   options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<INetworkAddressStoringService, NetworkAddressStoringService>();
         services.AddKeyedScoped<IGeoLocationDataProvider, IpStackService>("main");
