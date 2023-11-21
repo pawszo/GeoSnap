@@ -17,7 +17,7 @@ public class GetHistoryAsyncTests : NetworkAddressStoringServiceTestsBase
         var expectedDto = NetworkAddressHistoryDto.MapFrom(entity);
         RepositoryMock.Setup(r => r.FindByIPAsync(ip, It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.GetHistoryAsync(ip, CancellationToken.None);
@@ -35,7 +35,7 @@ public class GetHistoryAsyncTests : NetworkAddressStoringServiceTestsBase
         var entity = TestDataBuilder.CreateNetworkAddress(ip, "mydomain.com", ProtocolVersion.IPv4);
         RepositoryMock.Setup(r => r.FindByIPAsync(ip, It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as NetworkAddress);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.GetHistoryAsync(ip, CancellationToken.None);

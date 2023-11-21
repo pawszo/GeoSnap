@@ -19,7 +19,7 @@ public class SaveAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(null as NetworkAddress);
         RepositoryMock.Setup(r => r.AddAsync(It.IsAny<NetworkAddress>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.SaveAsync(dto, CancellationToken.None);
@@ -41,7 +41,7 @@ public class SaveAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(entity);
         RepositoryMock.Setup(r => r.AddAsync(It.IsAny<NetworkAddress>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(entity);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.SaveAsync(dto, CancellationToken.None);
@@ -63,7 +63,7 @@ public class SaveAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(null as NetworkAddress);
         RepositoryMock.Setup(r => r.AddAsync(It.IsAny<NetworkAddress>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(null as NetworkAddress);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.SaveAsync(dto, CancellationToken.None);
@@ -85,7 +85,7 @@ public class SaveAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(entity);
         RepositoryMock.Setup(r => r.Update(It.IsAny<NetworkAddress>()))
             .Returns(null as NetworkAddress);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.SaveAsync(dto, CancellationToken.None);

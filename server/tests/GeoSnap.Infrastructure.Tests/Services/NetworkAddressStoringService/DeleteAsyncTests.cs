@@ -16,7 +16,7 @@ public class DeleteAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(TestDataBuilder.CreateNetworkAddress(ip, "mydomain.com", ProtocolVersion.IPv4));
         RepositoryMock.Setup(r => r.Delete(It.IsAny<NetworkAddress>()))
             .Returns(true);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.DeleteAsync(ip, CancellationToken.None);
@@ -34,7 +34,7 @@ public class DeleteAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(TestDataBuilder.CreateNetworkAddress(ip, "mydomain.com", ProtocolVersion.IPv4));
         RepositoryMock.Setup(r => r.Delete(It.IsAny<NetworkAddress>()))
             .Returns(false);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.DeleteAsync(ip, CancellationToken.None);
@@ -52,7 +52,7 @@ public class DeleteAsyncTests : NetworkAddressStoringServiceTestsBase
             .ReturnsAsync(null as NetworkAddress);
         RepositoryMock.Setup(r => r.Delete(It.IsAny<NetworkAddress>()))
             .Returns(false);
-        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object);
+        Service = new GeoSnap.Infrastructure.Services.NetworkAddressStoringService(RepositoryMock.Object, LoggerMock.Object, CacheMock.Object);
 
         // Act
         var result = await Service.DeleteAsync(ip, CancellationToken.None);

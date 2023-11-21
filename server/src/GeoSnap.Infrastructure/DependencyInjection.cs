@@ -10,6 +10,11 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration["CacheConnection"];
+            options.InstanceName = configuration["geosnap"];
+        });
         services.AddDbContext<ApplicationDbContext>(options =>
                    options.UseInMemoryDatabase("TEST_DATABASE"));
         //TODO - Add real database

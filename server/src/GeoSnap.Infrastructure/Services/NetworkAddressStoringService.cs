@@ -3,17 +3,21 @@ using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Extensions;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace GeoSnap.Infrastructure.Services;
 public class NetworkAddressStoringService : INetworkAddressStoringService
 {
     private readonly INetworkAddressRepository _networkAddressRepository;
     private readonly ILogger<NetworkAddress> _logger;
+    private readonly IDistributedCache _cache;
 
-    public NetworkAddressStoringService(INetworkAddressRepository networkAddressRepository, ILogger<NetworkAddress> logger)
+
+    public NetworkAddressStoringService(INetworkAddressRepository networkAddressRepository, ILogger<NetworkAddress> logger, IDistributedCache cache)
     {
         _networkAddressRepository = networkAddressRepository;
         _logger = logger;
+        _cache = cache;
     }
 
     public async Task<bool> DeleteAsync(string ip, CancellationToken cancellationToken)
