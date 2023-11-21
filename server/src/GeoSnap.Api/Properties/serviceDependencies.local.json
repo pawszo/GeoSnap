@@ -5,6 +5,15 @@
       "resourceId": null,
       "type": "secrets.user",
       "connectionId": null
+    },
+    "postgresql1": {
+      "containerPorts": "5432:5432",
+      "secretStore": "LocalSecretsFile",
+      "containerName": "postgres",
+      "containerImage": "postgres",
+      "type": "postgresql.container",
+      "connectionId": "postgres",
+      "dynamicId": null
     }
   }
 }

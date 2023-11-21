@@ -2,6 +2,7 @@ using System.Reflection;
 using GeoSnap.Application;
 using GeoSnap.Infrastructure;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
