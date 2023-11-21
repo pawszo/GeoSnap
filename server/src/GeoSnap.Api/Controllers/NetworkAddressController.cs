@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using GeoSnap.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
-using GeoSnap.Domain.Extensions;
 using GeoSnap.Application.Queries;
 using GeoSnap.Application.Commands;
 
@@ -22,11 +21,6 @@ public class NetworkAddressController : ControllerBase
     [HttpGet("geolocation/{networkAddress}")]
     public async Task<ActionResult<NetworkAddressDto[]>> GetRecentLocationAsync(ISender sender, [FromRoute] string networkAddress)
     {
-        if(networkAddress is null || !networkAddress.IsValidNetworkAddress())
-        {
-            return BadRequest("Provided network address is not a valid IP or URL");
-        }
-
         var result = await sender.Send(new GetNetworkAddressRecentGeoLocationQuery(networkAddress));
 
         return result is null || result.Count == 0 ? NotFound() : Ok(result);
@@ -40,11 +34,6 @@ public class NetworkAddressController : ControllerBase
     [HttpGet("history/{networkAddress}")]
     public async Task<ActionResult<NetworkAddressHistoryDto[]>> GetHistoryAsync(ISender sender, [FromRoute] string networkAddress)
     {
-        if (networkAddress is null || !networkAddress.IsValidNetworkAddress())
-        {
-            return BadRequest("Provided network address is not a valid IP or URL");
-        }
-
         var result = await sender.Send(new GetNetworkAddressHistoricGeoLocationsQuery(networkAddress));
 
         return result is null || result.Count == 0 ? NotFound() : Ok(result);
@@ -57,11 +46,6 @@ public class NetworkAddressController : ControllerBase
     [HttpDelete("delete/{networkAddress}")]
     public async Task<ActionResult> DeleteAsync(ISender sender, [FromRoute] string networkAddress)
     {
-        if (networkAddress is null || !networkAddress.IsValidNetworkAddress())
-        {
-            return BadRequest("Provided network address is not a valid IP or URL");
-        }
-
         bool isRemoved = await sender.Send(new DeleteNetworkAddressDataCommand(networkAddress));
 
         return isRemoved ? Ok() : NotFound();
@@ -75,16 +59,6 @@ public class NetworkAddressController : ControllerBase
     [HttpPost("geolocation")]
     public async Task<ActionResult<NetworkAddressDto[]>> AddGeoLocationManuallyAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
     {
-        if (addNetworkAddressData is null || !addNetworkAddressData.NetworkAddress.IsValidNetworkAddress())
-        {
-            return BadRequest("Provided network address is not a valid IP or URL");
-        }
-
-        if(!addNetworkAddressData.Latitude.IsValidLatitude() || !addNetworkAddressData.Longitude.IsValidLongitude())
-        {
-            return BadRequest("Provided latitude or longitude is not valid. Acceptable range is -90 to 90 for latitude and -180 to 180 for longitude.");
-        }
-
         var result = await sender.Send(addNetworkAddressData);
 
         return Ok(result);

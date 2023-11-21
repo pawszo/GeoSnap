@@ -1,12 +1,12 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace GeoSnap.Application.Common.Behaviours;
-public class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
+namespace GeoSnap.Application.Common.Behaviors;
+public class UnhandledExceptionBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly ILogger<TRequest> _logger;
 
-    public UnhandledExceptionBehaviour(ILogger<TRequest> logger)
+    public UnhandledExceptionBehavior(ILogger<TRequest> logger)
     {
         _logger = logger;
     }

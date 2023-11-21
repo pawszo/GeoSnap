@@ -1,8 +1,10 @@
 ﻿using MediatR;
+using FluentValidation;
 using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Extensions;
 using GeoSnap.Domain.Exceptions;
+using GeoSnap.Application.Queries;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 
@@ -89,5 +91,26 @@ public class AddNetworkAddressDataCommandHandler(
         }
 
         return savedRecords.Count > 0 ? savedRecords : null;
+    }
+}
+
+public class AddNetworkAddressDataCommandValidator : AbstractValidator<AddNetworkAddressDataCommand>
+{
+    public AddNetworkAddressDataCommandValidator()
+    {
+        RuleFor(q => q.NetworkAddress)
+            .NotEmpty().WithMessage("Network address is required");
+
+        RuleFor(q => q.NetworkAddress)
+            .Must(n => n.IsValidNetworkAddress())
+            .WithMessage("Network address must be a valid IP or domain URL.");
+
+        RuleFor(q => q.Latitude)
+            .Must(l => l.IsValidLatitude())
+            .WithMessage("Latitude must be a valid decimal number between -90 and 90.");
+
+        RuleFor(q => q.Longitude)
+            .Must(l => l.IsValidLongitude())
+            .WithMessage("Longitude must be a valid decimal number between -180 and 180.");
     }
 }

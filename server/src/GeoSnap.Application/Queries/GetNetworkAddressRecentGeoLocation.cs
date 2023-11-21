@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using FluentValidation;
 using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Extensions;
@@ -65,5 +66,18 @@ public class GetNetworkAddressRecentGeoLocationQueryHandler(
             RecentGeoLocation = recentGeoLocation,
             Domain = domainUrl
         }, cancellationToken);
+    }
+}
+
+public class GetNetworkAddressRecentGeoLocationQueryValidator : AbstractValidator<GetNetworkAddressRecentGeoLocationQuery>
+{
+    public GetNetworkAddressRecentGeoLocationQueryValidator()
+    {
+        RuleFor(q => q.NetworkAddress)
+            .NotEmpty().WithMessage("Network address is required");
+
+        RuleFor(q => q.NetworkAddress)
+            .Must(n => n.IsValidNetworkAddress())
+            .WithMessage("Network address must be a valid IP or domain URL.");
     }
 }

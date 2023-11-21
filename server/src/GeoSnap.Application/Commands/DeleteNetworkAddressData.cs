@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using FluentValidation;
 using GeoSnap.Domain.Exceptions;
 using GeoSnap.Domain.Extensions;
 using GeoSnap.Application.Interfaces;
@@ -35,5 +36,18 @@ public class DeleteNetworkAddressDataCommandHandler(
         request.NetworkAddress.TryGetValidIp(out string ipAddress, out _);
        
         return await store.DeleteAsync(ipAddress, cancellationToken);
+    }
+}
+
+public class DeleteNetworkAddressDataCommandValidator : AbstractValidator<DeleteNetworkAddressDataCommand>
+{
+    public DeleteNetworkAddressDataCommandValidator()
+    {
+        RuleFor(q => q.NetworkAddress)
+            .NotEmpty().WithMessage("Network address is required");
+
+        RuleFor(q => q.NetworkAddress)
+            .Must(n => n.IsValidNetworkAddress())
+            .WithMessage("Network address must be a valid IP or domain URL.");
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using FluentValidation;
 using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Exceptions;
@@ -45,5 +46,18 @@ public class GetNetworkAddressHistoricGeoLocationsQueryHandler(
         }
 
         return [result];
+    }
+}
+
+public class GetNetworkAddressHistoricGeoLocationsQueryValidator : AbstractValidator<GetNetworkAddressHistoricGeoLocationsQuery>
+{
+    public GetNetworkAddressHistoricGeoLocationsQueryValidator()
+    {
+        RuleFor(q => q.NetworkAddress)
+            .NotEmpty().WithMessage("Network address is required");
+
+        RuleFor(q => q.NetworkAddress)
+            .Must(n => n.IsValidNetworkAddress())
+            .WithMessage("Network address must be a valid IP or domain URL.");
     }
 }
