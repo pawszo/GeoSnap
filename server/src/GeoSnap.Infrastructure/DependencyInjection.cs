@@ -19,6 +19,8 @@ public static class DependencyInjection
         var dbConnString = configuration.GetConnectionString("postgres");
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+        services.AddDbContextPool<ApplicationDbContext>((sp, builder) =>
+                          builder.UseNpgsql(dbConnString));
         services.AddDbContext<ApplicationDbContext>((sp, builder) =>
                    builder.UseNpgsql(dbConnString));
         services.AddScoped<INetworkAddressStoringService, NetworkAddressStoringService>();
