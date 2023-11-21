@@ -1,6 +1,6 @@
-﻿using GeoSnap.Domain.Entities;
+﻿using Newtonsoft.Json;
+using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
-using GeoSnap.Domain.Extensions;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 using Microsoft.Extensions.Caching.Distributed;
@@ -27,6 +27,7 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         {
             var isDeleted = _networkAddressRepository.Delete(record);
             if(isDeleted) _logger.LogInformation("Deleted record for {ip}", ip);
+            await _cache.RemoveAsync(ip);
             return isDeleted;
         }
 
@@ -36,10 +37,19 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
 
     public async Task<NetworkAddressHistoryDto?> GetHistoryAsync(string ip, CancellationToken cancellationToken)
     {
+        var cachedData = await _cache.GetStringAsync(ip, cancellationToken);
+        if (cachedData is not null)
+        {
+            _logger.LogInformation("Found cached data for {ip}", ip);
+            return JsonConvert.DeserializeObject<NetworkAddressHistoryDto>(cachedData);
+        }
+
         var record = await _networkAddressRepository.FindByIPAsync(ip, cancellationToken);
         if (record is not null)
         {
-            return NetworkAddressHistoryDto.MapFrom(record);
+            var history = NetworkAddressHistoryDto.MapFrom(record);
+            await _cache.SetStringAsync(ip, JsonConvert.SerializeObject(history), cancellationToken);
+            return history;
         }
 
         _logger.LogWarning("No record found for {ip}", ip);
@@ -58,7 +68,9 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
             if (createdRecord is not null)
             {
                 _logger.LogInformation("Created record for {IP}", recent.IP);
-                return NetworkAddressHistoryDto.MapFrom(createdRecord).Latest();
+                var history = NetworkAddressHistoryDto.MapFrom(createdRecord);
+                await _cache.SetStringAsync(createdRecord.IP, JsonConvert.SerializeObject(history), cancellationToken);
+                return history.Latest();
             }
             _logger.LogWarning("Failed to create geo location for {IP}", recent.IP);
             return recent;
@@ -72,7 +84,9 @@ public class NetworkAddressStoringService : INetworkAddressStoringService
         if (updatedRecord is not null)
         {
             _logger.LogInformation("Updated record for {IP}", updatedRecord.IP);
-            return NetworkAddressHistoryDto.MapFrom(updatedRecord).Latest();
+            var history = NetworkAddressHistoryDto.MapFrom(updatedRecord);
+            await _cache.SetStringAsync(updatedRecord.IP, JsonConvert.SerializeObject(history), cancellationToken);
+            return history.Latest();
         }
 
         _logger.LogWarning("Failed to update geo location for existing record with {IP}", recent.IP);
