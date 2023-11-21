@@ -4,7 +4,6 @@ using GeoSnap.Domain.Entities;
 using GeoSnap.Application.Dtos;
 using GeoSnap.Domain.Extensions;
 using GeoSnap.Domain.Exceptions;
-using GeoSnap.Application.Queries;
 using Microsoft.Extensions.Logging;
 using GeoSnap.Application.Interfaces;
 

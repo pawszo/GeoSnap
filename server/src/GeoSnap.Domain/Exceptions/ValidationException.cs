@@ -1,16 +1,10 @@
 ﻿using FluentValidation.Results;
 
 namespace GeoSnap.Domain.Exceptions;
-public class ValidationException : Exception
+public class ValidationException : FluentValidation.ValidationException
 {
-    public ValidationException()
-        : base("One or more validation failures have occurred.")
-    {
-        Errors = new Dictionary<string, string[]>();
-    }
-
     public ValidationException(IEnumerable<ValidationFailure> failures)
-        : this()
+        : base(failures)
     {
         Errors = failures
             .GroupBy(e => e.PropertyName, e => e.ErrorMessage)

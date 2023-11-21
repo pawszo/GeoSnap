@@ -27,7 +27,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
                 .ToList();
 
             if (failures.Any())
-                throw new FluentValidation.ValidationException(failures);
+                throw new GeoSnap.Domain.Exceptions.ValidationException(failures);
         }
         return await next();
     }

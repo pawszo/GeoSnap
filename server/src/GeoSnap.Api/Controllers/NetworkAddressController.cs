@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using GeoSnap.Api.Filters;
 using GeoSnap.Application.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using GeoSnap.Application.Queries;
@@ -19,6 +20,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="networkAddress">IP or URL</param>
     /// <returns>Most recent geo location that was available</returns>
     [HttpGet("geolocation/{networkAddress}")]
+    [ValidationFilter]
     public async Task<ActionResult<NetworkAddressDto[]>> GetRecentLocationAsync(ISender sender, [FromRoute] string networkAddress)
     {
         var result = await sender.Send(new GetNetworkAddressRecentGeoLocationQuery(networkAddress));
@@ -32,6 +34,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="networkAddress">IP or URL</param>
     /// <returns>geo locations history for a network address</returns>
     [HttpGet("history/{networkAddress}")]
+    [ValidationFilter]
     public async Task<ActionResult<NetworkAddressHistoryDto[]>> GetHistoryAsync(ISender sender, [FromRoute] string networkAddress)
     {
         var result = await sender.Send(new GetNetworkAddressHistoricGeoLocationsQuery(networkAddress));
@@ -44,6 +47,7 @@ public class NetworkAddressController : ControllerBase
     /// </summary>
     /// <param name="networkAddress">IP or URL</param>
     [HttpDelete("delete/{networkAddress}")]
+    [ValidationFilter]
     public async Task<ActionResult> DeleteAsync(ISender sender, [FromRoute] string networkAddress)
     {
         bool isRemoved = await sender.Send(new DeleteNetworkAddressDataCommand(networkAddress));
@@ -57,6 +61,7 @@ public class NetworkAddressController : ControllerBase
     /// <param name="addNetworkAddressData">IP or URL and with related geo location data</param>
     /// <returns>Created record</returns>
     [HttpPost("geolocation")]
+    [ValidationFilter]
     public async Task<ActionResult<NetworkAddressDto[]>> AddGeoLocationManuallyAsync(ISender sender, [FromBody] AddNetworkAddressDataCommand addNetworkAddressData)
     {
         var result = await sender.Send(addNetworkAddressData);
