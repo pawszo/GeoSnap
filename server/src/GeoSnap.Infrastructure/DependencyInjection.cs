@@ -15,16 +15,14 @@ public static class DependencyInjection
             options.Configuration = configuration["CacheConnection"];
             options.InstanceName = configuration["geosnap"];
         });
-        services.AddDbContext<ApplicationDbContext>(options =>
-                   options.UseInMemoryDatabase("TEST_DATABASE"));
-        //TODO - Add real database
-
+        //services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
         services.AddScoped<INetworkAddressStoringService, NetworkAddressStoringService>();
         services.AddKeyedScoped<IGeoLocationDataProvider, IpStackService>("main");
         services.AddKeyedScoped<IGeoLocationDataProvider, IpifyService>("alternative");
         services.AddScoped<IGeoLocationService, GeoLocationService>();
         services.AddScoped<INetworkAddressRepository, NetworkAddressRepository>();
         services.AddTransient<IDnsResolvingService, DnsResolvingService>();
+        //services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
         services.AddHttpClient("IpStack", client =>
         {
@@ -36,6 +34,8 @@ public static class DependencyInjection
             client.BaseAddress = new Uri(configuration["BaseUrl:Ipify"]);
 
         });
+        services.AddDbContextFactory<ApplicationDbContext>(options =>
+                   options.UseNpgsql(configuration.GetConnectionString("postgres")));
         return services;
     }
 }

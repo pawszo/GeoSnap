@@ -1,8 +1,10 @@
-﻿using GeoSnap.Domain.Entities;
+﻿using System.Reflection;
+using GeoSnap.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using GeoSnap.Application.Interfaces;
 
 namespace GeoSnap.Infrastructure;
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -13,6 +15,7 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.Entity<NetworkAddressGeoLocation>()
             .HasKey(g => new { g.IP, g.CapturedAt });
         modelBuilder.Entity<NetworkAddressGeoLocation>()

@@ -3,6 +3,11 @@
     "secrets1": {
       "type": "secrets",
       "connectionId": null
+    },
+    "postgresql1": {
+      "type": "postgresql",
+      "connectionId": "postgres",
+      "dynamicId": null
     }
   }
 }
