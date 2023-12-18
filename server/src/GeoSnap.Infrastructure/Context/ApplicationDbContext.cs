@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace GeoSnap.Infrastructure.Context;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
 
@@ -21,12 +21,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<NetworkAddress> NetworkAddresses => Set<NetworkAddress>();
     public DbSet<NetworkAddressGeoLocation> GeoLocations => Set<NetworkAddressGeoLocation>();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //var dbConnString = _configuration.GetConnectionString("postgres");
-        //optionsBuilder.UseNpgsql("Data Source=(local);Initial Catalog=PwiSchwanTest;Integrated Security=True;Persist Security Info=True;Encrypt=False;");
-        //optionsBuilder.UseNpgsql(dbConnString);
-    }
+    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //{
+    //    //var dbConnString = _configuration.GetConnectionString("postgres");
+    //    //optionsBuilder.UseNpgsql("Data Source=(local);Initial Catalog=PwiSchwanTest;Integrated Security=True;Persist Security Info=True;Encrypt=False;");
+    //    //optionsBuilder.UseNpgsql(dbConnString);
+    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
