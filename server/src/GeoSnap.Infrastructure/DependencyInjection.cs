@@ -17,6 +17,7 @@ public static class DependencyInjection
             options.InstanceName = configuration["geosnap"];
         });
         var dbConnString = configuration.GetConnectionString("postgres");
+        services.AddSingleton<DbContextOptions<ApplicationDbContext>>(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(dbConnString).Options);
         services.AddSingleton<DbContextProvider<ApplicationDbContext>, DbContextProvider<ApplicationDbContext>>();
         services.AddScoped<IApplicationDbContext>(provider => 
             provider.GetRequiredService<DbContextProvider<ApplicationDbContext>>().GetDbContext());
