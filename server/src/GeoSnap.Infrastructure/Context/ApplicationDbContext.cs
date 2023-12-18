@@ -1,15 +1,19 @@
 ﻿using MongoDB.Driver;
+using System.Configuration;
 using GeoSnap.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using GeoSnap.Application.Interfaces;
+using Microsoft.Extensions.Configuration;
 using GeoSnap.Infrastructure.Data.Configurations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GeoSnap.Infrastructure.Context;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions options) : base(options)
+    private readonly IConfiguration _configuration;
+    public ApplicationDbContext(DbContextOptions options, IConfiguration config) : base(options)
     {
+        _configuration = config;
     }
 
     public ApplicationDbContext() : base()
@@ -21,10 +25,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-
-        //// This line is required for migrations only. Uncomment and adjust the connection string for the migration and comment it again afterwards.
-        //optionsBuilder.UseSqlServer("Data Source=(local);Initial Catalog=PwiSchwanTest;Integrated Security=True;Persist Security Info=True;Encrypt=False;");
-        ////
+        var dbConnString = _configuration.GetConnectionString("postgres");
+        //optionsBuilder.UseNpgsql("Data Source=(local);Initial Catalog=PwiSchwanTest;Integrated Security=True;Persist Security Info=True;Encrypt=False;");
+        optionsBuilder.UseNpgsql(dbConnString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
