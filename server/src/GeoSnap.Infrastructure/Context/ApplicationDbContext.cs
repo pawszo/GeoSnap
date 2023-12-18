@@ -10,10 +10,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace GeoSnap.Infrastructure.Context;
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    private readonly IConfiguration _configuration;
-    public ApplicationDbContext(DbContextOptions options, IConfiguration config) : base(options)
+    public ApplicationDbContext(DbContextOptions options) : base(options)
     {
-        _configuration = config;
     }
 
     public ApplicationDbContext() : base()
@@ -25,9 +23,9 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var dbConnString = _configuration.GetConnectionString("postgres");
+        //var dbConnString = _configuration.GetConnectionString("postgres");
         //optionsBuilder.UseNpgsql("Data Source=(local);Initial Catalog=PwiSchwanTest;Integrated Security=True;Persist Security Info=True;Encrypt=False;");
-        optionsBuilder.UseNpgsql(dbConnString);
+        //optionsBuilder.UseNpgsql(dbConnString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

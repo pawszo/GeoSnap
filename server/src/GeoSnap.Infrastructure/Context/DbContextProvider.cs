@@ -4,24 +4,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace GeoSnap.Infrastructure.Context;
-public class DbContextProvider<TDbContext> : IDbContextProvider<TDbContext> where TDbContext : DbContext, new()
+public class DbContextProvider : IDbContextProvider<ApplicationDbContext>
 {
-    private readonly DbContextOptions<TDbContext> _options;
+    //private PwiDbContext? dbContext;
+    private readonly DbContextOptions<ApplicationDbContext> _dbContextOptions;
+    private readonly IConfiguration _configuration;
 
-    public DbContextProvider(DbContextOptions<TDbContext> options)
+    public DbContextProvider(DbContextOptions<ApplicationDbContext> dbContextOptions)
     {
-        _options = options;
+        _dbContextOptions = dbContextOptions;
     }
 
-    public DbContextProvider()
+    public ApplicationDbContext GetDbContext()
     {
-        _options = new DbContextOptions<TDbContext>();
-    }
-
-    public TDbContext GetDbContext()
-    {
-        return new TDbContext();
+        return new ApplicationDbContext(_dbContextOptions);   
     }
 }

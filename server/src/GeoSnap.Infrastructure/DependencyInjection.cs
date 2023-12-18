@@ -18,10 +18,11 @@ public static class DependencyInjection
         });
         var dbConnString = configuration.GetConnectionString("postgres");
         services.AddSingleton<DbContextOptions<ApplicationDbContext>>(new DbContextOptionsBuilder<ApplicationDbContext>().UseNpgsql(dbConnString).Options);
-        services.AddSingleton<IDbContextProvider<ApplicationDbContext>, DbContextProvider<ApplicationDbContext>>();
+        services.AddSingleton<IDbContextProvider<ApplicationDbContext>, DbContextProvider>();
         services.AddScoped<IApplicationDbContext>(provider => 
             provider.GetRequiredService<IDbContextProvider<ApplicationDbContext>>().GetDbContext());
-
+        services.AddDbContext<ApplicationDbContext>((sp, builder) =>
+                   builder.UseNpgsql(dbConnString));
         //services.AddDbContextPool<ApplicationDbContext>((sp, builder) =>
         //                  builder.UseNpgsql(dbConnString));
         //services.AddDbContext<ApplicationDbContext>((sp, builder) =>
