@@ -3,7 +3,7 @@ using GeoSnap.Domain.Enums;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace GeoSnap.Domain.Entities;
-public class NetworkAddress
+public class NetworkAddress : DomainObject
 {
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]

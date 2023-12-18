@@ -5,7 +5,7 @@ using GeoSnap.Application.Interfaces;
 using GeoSnap.Infrastructure.Context;
 
 namespace GeoSnap.Infrastructure.Repositories;
-internal class MongoRepository : INetworkAddressRepository
+public class MongoRepository : INetworkAddressRepository
 {
     private readonly MongoDbContext _dbContext;
     private readonly ILogger<NetworkAddress> _logger;

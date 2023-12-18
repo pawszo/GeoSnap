@@ -17,12 +17,14 @@ public static class DependencyInjection
             options.InstanceName = configuration["geosnap"];
         });
         var dbConnString = configuration.GetConnectionString("postgres");
-        services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-        services.AddDbContextPool<ApplicationDbContext>((sp, builder) =>
-                          builder.UseNpgsql(dbConnString));
-        services.AddDbContext<ApplicationDbContext>((sp, builder) =>
-                   builder.UseNpgsql(dbConnString));
+        services.AddSingleton<DbContextProvider<ApplicationDbContext>, DbContextProvider<ApplicationDbContext>>();
+        services.AddScoped<IApplicationDbContext>(provider => 
+            provider.GetRequiredService<DbContextProvider<ApplicationDbContext>>().GetDbContext());
+
+        //services.AddDbContextPool<ApplicationDbContext>((sp, builder) =>
+        //                  builder.UseNpgsql(dbConnString));
+        //services.AddDbContext<ApplicationDbContext>((sp, builder) =>
+        //           builder.UseNpgsql(dbConnString));
         services.AddScoped<INetworkAddressStoringService, NetworkAddressStoringService>();
         services.AddKeyedScoped<IGeoLocationDataProvider, IpStackService>("main");
         services.AddKeyedScoped<IGeoLocationDataProvider, IpifyService>("alternative");
