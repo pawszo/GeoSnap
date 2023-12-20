@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using GeoSnap.Application.Interfaces;
+using GeoSnap.Infrastructure.Context;
 
 namespace GeoSnap.Infrastructure.Repositories;
 public class NetworkAddressRepository(ILogger<NetworkAddress> logger, ApplicationDbContext dbContext) : INetworkAddressRepository

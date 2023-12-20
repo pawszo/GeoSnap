@@ -1,7 +1,7 @@
 ﻿using GeoSnap.Domain.Enums;
 
 namespace GeoSnap.Domain.Entities;
-public class NetworkAddressGeoLocation
+public class NetworkAddressGeoLocation : DomainObject
 {
     public DateTime CapturedAt { get; set; }
     public required string DataProviderName { get; set; }
